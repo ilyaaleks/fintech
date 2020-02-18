@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <title>Spring Security Example </title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">TestTask</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item {{#isAdmin}}d-none{{/isAdmin}}">
+                <a class="nav-link" href="/user/new">Add user</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user">User list</a>
+            </li>
+            <li class="nav-item">
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                    <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Sign Out"/>
+                </form>
+            </li>
+            <li class="nav-item">
+
+                <form action="/user/roleFilter" method="get">
+                    <select class="custom-select" name="role">
+                        <option value="ADMIN">Admin</option>
+                        <option value="USER">User</option>
+                    </select>
+                    <button class="btn" type="submit">Filter by role</button>
+                </form>
+            </li>
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0" action="/user/filter" method="get">
+            <input class="form-control mr-sm-2" type="search" placeholder="Username" name="username"
+                   aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search by username</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div>Список пользователей</div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Firstname</th>
+            <th scope="col">Lastname</th>
+            <th scope="col">Role</th>
+            <th scope="col">Edit button</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#users}}
+        <tr>
+            <th scope="row"><a href="/user/{{id}}">{{username}}</a></th>
+            <td>{{firstname}}</td>
+            <td>{{lastname}}</td>
+            <td>{{role}}</td>
+            <td><a href="/user/{{id}}/edit">edit</a></td>
+        </tr>
+        {{/users}}
+        </tbody>
+    </table>
+    <div>
+        <ul class="pagination">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Page</a>
+            </li>
+            {{#totalPage}}
+            <li class="page-item">
+                <a class="page-link" href="/user?page={{.}}" tabindex="-1">{{.}}</a>
+            </li>
+            {{/totalPage}}
+        </ul>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+</html>
